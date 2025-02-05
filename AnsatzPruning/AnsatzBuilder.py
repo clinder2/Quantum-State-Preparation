@@ -26,6 +26,8 @@ def NaiveBuilder(params:list, ansatz:QuantumCircuit, layers:int,
                  circuit:QuantumCircuit, hamiltonian:SparsePauliOp, estimator:Estimator):
     n = circuit.num_qubits
     newParams = ParameterVector('new', layers*n)
+    deletedParams = set()
+    finalLay = []
     for l in range(0,layers):
         ### Naive layer construction
         naiveLayer = QuantumCircuit(n)
@@ -52,12 +54,22 @@ def NaiveBuilder(params:list, ansatz:QuantumCircuit, layers:int,
             del naiveLayer.data[heapq.heappop(remove)-i]
             i = i + 1
             del params[len(params)-1]
+        tempParams = []
+        for i in range(n):
+            tempParams.append(1)
+        lay = minimize(cost_func, tempParams, args=(circuit, H, estimator), method="COBYLA")
+        print("layer by layer", lay)
+        if l == layers - 1:
+            finalLay = lay
+
         ansatz = ansatz.compose(naiveLayer)
         print(circuit.compose(ansatz))
+        print(ansatz.data)
         #print(cost_func(params,circuit,hamiltonian,estimator))
     circuit = circuit.compose(ansatz)
-    x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
-    print(x)
+    # x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
+    # print(x)
+    print("Final Layer", finalLay)
 
 if __name__ == "__main__":
     H = SparsePauliOp.from_list([("ZIZZ", 1),("ZZII", 3),("IZZI", 1),("IIZZ", 1)]) # Toy hamiltonian
