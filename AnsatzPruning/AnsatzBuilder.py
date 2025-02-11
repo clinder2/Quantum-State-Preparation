@@ -4,7 +4,7 @@ import pandas as pd
 from random import randint
 import matplotlib
 matplotlib.use('MacOSX')
-matplotlib.rcParams['interactive'] == True
+var = matplotlib.rcParams['interactive'] == True
 from scipy.optimize import minimize
 from qiskit_aer.aerprovider import AerSimulator
 from qiskit import QuantumCircuit, transpile
