@@ -64,7 +64,27 @@ def fitness(qubits, layer: QuantumCircuit, estimator: Estimator, H):
     params = np.ones(len(layer.parameters))
     return cost_func(params, layer, H, estimator)[len(H)-1]
 
-def mutate(layer: QuantumCircuit):
+def mutate(layer: str, qubits: int, numMutated: int):
+    # print("LayerHere", layer)
+    # Stupid mutate function
+    replaceProbability = .3 # To be modified later
+    for i in range(numMutated):
+        startGate = ""
+        endGate = ""
+        randStart = 0
+        randEnd = 0
+        while startGate == endGate:
+            randStart = random.randint(0, qubits)
+            randEnd = random.randint(0, qubits)
+            startGate = layer[randStart]
+            endGate = layer[randEnd]
+        probability = random.random()
+        if probability < replaceProbability:
+            if randStart < randEnd:
+                layer = layer[:randStart] + endGate + layer[randStart + 1:]
+                layer = layer[:randEnd] + startGate + layer[randEnd + 1:]
+        else:
+            layer = layer[:randStart] + layer[randStart + 1:]
     return layer
 
 def QGA(popSize: int, qubits: int, generations: int, estimator: Estimator, H):
@@ -93,7 +113,7 @@ def QGA(popSize: int, qubits: int, generations: int, estimator: Estimator, H):
         r = np.random.normal(.5, .5, popSize)
         for j in range(0, len(r)):
             if r[j] <= pm:
-                ordered[j] = mutate(ordered[j])
+                ordered[j] = mutate(ordered[j], qubits, 2) #Hardcoded number of mutated gates
         ## MATING TODO
         # Randomly select from modified population
         indicies = []
