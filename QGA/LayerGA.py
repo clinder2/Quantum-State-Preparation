@@ -67,8 +67,8 @@ def fitness(qubits, layer: QuantumCircuit, estimator: Estimator, H):
 def mutate(layer: str, qubits: int):
     print("Original Layer:", layer)
     # Stupid mutate function
-    replaceProbability = .9 # To be modified later
-    numMutated = math.floor(qubits * .25)
+    replaceProbability = .4 # To be modified later
+    numMutated = math.floor(qubits * .4)
     for i in range(numMutated):
         if qubits < 3:
             return layer
@@ -130,11 +130,25 @@ def QGA(popSize: int, qubits: int, generations: int, estimator: Estimator, H):
         chromPop = newPop
         print(fitnessVals)
 
+#Generate random hamiltonian of variable size in terms of Pauli gates (Only using Z and I gates for now)
+def hamiltonianGenerator(length : int):
+    probability = .5
+    hamiltonian = ""
+    for i in range(length):
+        rand = random.random()
+        if rand < probability:
+            hamiltonian += "I"
+        else:
+            hamiltonian += "Z"
+    print(hamiltonian)
+    return hamiltonian
+
 
 if __name__ == "__main__":
-    H = SparsePauliOp.from_list([("ZIZZ", 1),("ZZII", 3),("IZZI", 1),("IIZZ", 1)]) # Toy hamiltonian
+    hamiltonianLength = 10
+    H = SparsePauliOp.from_list([(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 3),(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 1)]) # Toy hamiltonian
     observables = [
         *H.paulis,H
     ]
     buildLayer('RRIR|0,1|2,3|1,3', 4)
-    QGA(10, 4, 1, Estimator(), observables)
+    QGA(10, 10, 1, Estimator(), observables)
