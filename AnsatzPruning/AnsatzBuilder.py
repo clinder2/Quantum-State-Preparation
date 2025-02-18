@@ -1,21 +1,8 @@
-import numpy as np
-import math
-import pandas as pd
-from random import randint
 import matplotlib
 matplotlib.use('MacOSX')
 matplotlib.rcParams['interactive'] == True
-from scipy.optimize import minimize
-from qiskit_aer.aerprovider import AerSimulator
-from qiskit import QuantumCircuit, transpile
-from qiskit.circuit.library import RealAmplitudes
-from qiskit.circuit.library import *
-from qiskit.circuit import ClassicalRegister, QuantumRegister, Parameter, ParameterVector
-from qiskit.primitives import StatevectorEstimator as Estimator
-from qiskit.primitives import StatevectorSampler as Sampler
-from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
-from qiskit.quantum_info import *
-from Utilities import *
+from qiskit.circuit import ParameterVector
+from QGA.Utilities import *
 import heapq
 
 from rotosolve import rotosolve
@@ -27,6 +14,8 @@ def NaiveBuilder(params:list, ansatz:QuantumCircuit, layers:int,
                  circuit:QuantumCircuit, hamiltonian:SparsePauliOp, estimator:Estimator):
     n = circuit.num_qubits
     newParams = ParameterVector('new', layers*n)
+    deletedParams = set()
+    finalLay = []
     for l in range(0,layers):
         ### Naive layer construction
         naiveLayer = QuantumCircuit(n)
@@ -53,12 +42,22 @@ def NaiveBuilder(params:list, ansatz:QuantumCircuit, layers:int,
             del naiveLayer.data[heapq.heappop(remove)-i]
             i = i + 1
             del params[len(params)-1]
+        tempParams = []
+        for i in range(n):
+            tempParams.append(1)
+        lay = minimize(cost_func, tempParams, args=(circuit, H, estimator), method="COBYLA")
+        print("layer by layer", lay)
+        if l == layers - 1:
+            finalLay = lay
+
         ansatz = ansatz.compose(naiveLayer)
         print(circuit.compose(ansatz))
+        print(ansatz.data)
         #print(cost_func(params,circuit,hamiltonian,estimator))
     circuit = circuit.compose(ansatz)
-    x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
-    print(x)
+    # x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
+    # print(x)
+    print("Final Layer", finalLay)
 
     # y = rotosolve(circuit, 10, H) 
     # print(cost_func(y, circuit, H, estimator))
