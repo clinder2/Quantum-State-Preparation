@@ -18,6 +18,7 @@ from qiskit.quantum_info import *
 from Utilities import *
 import heapq
 
+from rotosolve import rotosolve
 """
 Function to naively add fully parametrized, maximally entangled layer layers times
 Calculates gradients for each layer, removes smallest magnitude RY gates with given pruning rate
@@ -58,6 +59,9 @@ def NaiveBuilder(params:list, ansatz:QuantumCircuit, layers:int,
     circuit = circuit.compose(ansatz)
     x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
     print(x)
+
+    # y = rotosolve(circuit, 10, H) 
+    # print(cost_func(y, circuit, H, estimator))
 
 if __name__ == "__main__":
     H = SparsePauliOp.from_list([("ZIZZ", 1),("ZZII", 3),("IZZI", 1),("IIZZ", 1)]) # Toy hamiltonian
