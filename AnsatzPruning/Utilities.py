@@ -4,8 +4,8 @@ import time
 import pandas as pd
 from random import randint
 import matplotlib
-matplotlib.use('MacOSX')
-matplotlib.rcParams['interactive'] == True
+#matplotlib.use('MacOSX')
+#matplotlib.rcParams['interactive'] == True
 import csv
 from scipy.optimize import minimize
 from qiskit_aer.aerprovider import AerSimulator
