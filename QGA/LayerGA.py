@@ -134,21 +134,31 @@ def QGA(popSize: int, qubits: int, generations: int, estimator: Estimator, H):
 def hamiltonianGenerator(length : int):
     probability = .5
     hamiltonian = ""
+    swaps = ""
     for i in range(length):
         rand = random.random()
         if rand < probability:
             hamiltonian += "I"
         else:
             hamiltonian += "Z"
-    print(hamiltonian)
-    return hamiltonian
+
+    for i in range(length // 2):
+        rand = np.random.choice(length, 2, True)
+        prettyRand = '|' + str(rand[0]) + ',' + str(rand[1])
+        swaps += prettyRand
+    print(hamiltonian + swaps)
+    return hamiltonian + swaps
 
 
 if __name__ == "__main__":
     hamiltonianLength = 10
-    H = SparsePauliOp.from_list([(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 3),(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 1)]) # Toy hamiltonian
-    observables = [
-        *H.paulis,H
-    ]
-    buildLayer('RRIR|0,1|2,3|1,3', 4)
-    QGA(10, 10, 1, Estimator(), observables)
+    # H = SparsePauliOp.from_list([(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 3),(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 1)]) # Toy hamiltonian
+    # observables = [
+    #     *H.paulis,H
+    # ]
+    # buildLayer('RRIR|0,1|2,3|1,3', 4)
+    # QGA(10, 10, 1, Estimator(), observables)
+    file_path = 'hamiltonianOutput.txt'
+    with open(file_path, "w") as file:
+        for i in range(200):
+            file.write(hamiltonianGenerator(9) + "\n")
