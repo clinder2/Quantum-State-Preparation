@@ -62,12 +62,12 @@ def randomLayer(qubits: int):
 def fitness(qubits, layer: QuantumCircuit, estimator: Estimator, H):
     layer = buildLayer(layer, qubits)
     params = np.ones(len(layer.parameters))
-    return cost_func(params, layer, H, estimator)[len(H)-1]
+    return cost_func(params, layer, H, estimator)
 
 def mutate(layer: str, qubits: int):
     print("Original Layer:", layer)
     # Stupid mutate function
-    replaceProbability = .4 # To be modified later
+    replaceProbability = 1 # To be modified later
     numMutated = math.floor(qubits * .4)
     for i in range(numMutated):
         if qubits < 3:
@@ -94,6 +94,7 @@ def mutate(layer: str, qubits: int):
 
 def QGA(popSize: int, qubits: int, generations: int, estimator: Estimator, H):
     chromPop = [randomLayer(qubits) for i in range(0, popSize)]
+    print("CHROMPOP", chromPop)
     fitnessVals = [fitness(qubits, chromPop[i], estimator, H).item() for i in range(0, popSize)]
     # GA PARAMETERS
     elitism = 0.1
@@ -129,6 +130,7 @@ def QGA(popSize: int, qubits: int, generations: int, estimator: Estimator, H):
             newPop.append(ordered[r[t]])
         chromPop = newPop
         print(fitnessVals)
+    return chromPop
 
 #Generate random hamiltonian of variable size in terms of Pauli gates (Only using Z and I gates for now)
 def hamiltonianGenerator(length : int):
@@ -147,18 +149,33 @@ def hamiltonianGenerator(length : int):
         prettyRand = '|' + str(rand[0]) + ',' + str(rand[1])
         swaps += prettyRand
     print(hamiltonian + swaps)
-    return hamiltonian + swaps
+    return hamiltonian
 
 
 if __name__ == "__main__":
-    hamiltonianLength = 10
-    # H = SparsePauliOp.from_list([(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 3),(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 1)]) # Toy hamiltonian
-    # observables = [
-    #     *H.paulis,H
-    # ]
-    # buildLayer('RRIR|0,1|2,3|1,3', 4)
-    # QGA(10, 10, 1, Estimator(), observables)
-    file_path = 'hamiltonianOutput.txt'
-    with open(file_path, "w") as file:
-        for i in range(200):
-            file.write(hamiltonianGenerator(9) + "\n")
+    hamiltonianLength = 4
+    H = SparsePauliOp.from_list([(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 3),(hamiltonianGenerator(hamiltonianLength), 1),(hamiltonianGenerator(hamiltonianLength), 1)]) # Toy hamiltonian
+    observables = [
+        *H.paulis,H
+    ]
+    x = buildLayer('RRIR|0,1|2,3|1,3', 4)
+    # print(x)
+    chrom = QGA(50, 4, 1, Estimator(), H)
+    print("CRHOM", chrom)
+    out = []
+    for i in range(len(chrom)):
+        temp = buildLayer(chrom[i], 4)
+        # print(temp)
+        out.append(minimize(cost_func, np.ones(temp.num_parameters), args=(temp, H, Estimator()), method="COBYLA"))
+        # print(out[i], "NEWLAYER")
+        # print(H)
+    # for i in range(4):
+    #     print(randomLayer(4))
+    print(out)
+    # print(fitness(4, 'RRIR|0,1|2,3|1,3', Estimator(), observables))
+    # print(minimize(cost_func, np.ones(3), args=(x, H, Estimator()), method="COBYLA"))
+    # QGA(10, 10, 20, Estimator(), observables)
+    # file_path = 'hamiltonianOutput.txt'
+    # with open(file_path, "w") as file:
+    #     for i in range(200):
+    #         file.write(hamiltonianGenerator(9) + "\n")

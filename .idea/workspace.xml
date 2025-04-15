@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bfe9e2d2-e380-4d53-be01-92c33e49259d" name="Changes" comment="generated text file" />
+    <list default="true" id="bfe9e2d2-e380-4d53-be01-92c33e49259d" name="Changes" comment="generated other file of sparse pauli ops" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,30 +35,35 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2rK1glKrwQ4mFOfGuvZLFyrY6GM" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Python.AnsatzBuilder.executor&quot;: &quot;Run&quot;,
-    &quot;Python.LayerGA.executor&quot;: &quot;Run&quot;,
-    &quot;Python.PCA_SVMClassification.executor&quot;: &quot;Run&quot;,
-    &quot;Python.PruningTest.executor&quot;: &quot;Run&quot;,
-    &quot;Python.SimulatedAnnealing.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TwoQubitPCA.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.Mappings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Python.AnsatzBuilder.executor": "Run",
+    "Python.LayerGA.executor": "Run",
+    "Python.OptimizerTest.executor": "Run",
+    "Python.PCA_SVMClassification.executor": "Run",
+    "Python.PruningTest.executor": "Run",
+    "Python.SimulatedAnnealing.executor": "Run",
+    "Python.TwoQubitPCA.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.Mappings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/QGA" />
@@ -119,6 +124,7 @@
       <workItem from="1739921710710" duration="773000" />
       <workItem from="1742942122801" duration="1708000" />
       <workItem from="1744151878563" duration="2648000" />
+      <workItem from="1744682214339" duration="1633000" />
     </task>
     <task id="LOCAL-00001" summary="Added optimization on a layer basis">
       <option name="closed" value="true" />
@@ -168,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744154082309</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="generated other file of sparse pauli ops">
+      <option name="closed" value="true" />
+      <created>1744683243755</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1744683243755</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -186,12 +200,14 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Added optimization on a layer basis" />
     <MESSAGE value="Added naive mutate function" />
     <MESSAGE value="Fixed bugs i mutation function" />
     <MESSAGE value="added hamiltonian generator" />
     <MESSAGE value="generated text file" />
-    <option name="LAST_COMMIT_MESSAGE" value="generated text file" />
+    <MESSAGE value="generated other file of sparse pauli ops" />
+    <option name="LAST_COMMIT_MESSAGE" value="generated other file of sparse pauli ops" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -210,6 +226,7 @@
     <SUITE FILE_PATH="coverage/Quantum_State_PreparationS25$SimulatedAnnealing.coverage" NAME="SimulatedAnnealing Coverage Results" MODIFIED="1736293517931" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Optimization" />
     <SUITE FILE_PATH="coverage/Quantum_State_PreparationS25$PruningTest.coverage" NAME="PruningTest Coverage Results" MODIFIED="1738108068397" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnsatzPruning" />
     <SUITE FILE_PATH="coverage/Quantum_State_PreparationS25$AnsatzBuilder.coverage" NAME="AnsatzBuilder Coverage Results" MODIFIED="1738715017089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnsatzPruning" />
-    <SUITE FILE_PATH="coverage/Quantum_State_PreparationS25$LayerGA.coverage" NAME="LayerGA Coverage Results" MODIFIED="1744154046895" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QGA" />
+    <SUITE FILE_PATH="coverage/Quantum_State_PreparationS25$OptimizerTest.coverage" NAME="OptimizerTest Coverage Results" MODIFIED="1744682688926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/AnsatzPruning" />
+    <SUITE FILE_PATH="coverage/Quantum_State_PreparationS25$LayerGA.coverage" NAME="LayerGA Coverage Results" MODIFIED="1744682322628" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/QGA" />
   </component>
 </project>
