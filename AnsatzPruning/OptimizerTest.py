@@ -1,3 +1,5 @@
+import csv
+
 import numpy as np
 import math
 import pandas as pd
@@ -141,7 +143,7 @@ if __name__ == "__main__":
     total_speedup = 0
     total_err = 0
     #final = final.assign_parameters(guess)
-    for t in range(0, 1):
+    for t in range(0, 500):
         H=makeH(4, 5)
         observables = [
             *H.paulis,H
@@ -172,10 +174,10 @@ if __name__ == "__main__":
         ans.append(a)
     print(total_speedup/20)
     print(total_err/20)
-    """ with open("Pruning-IterativeOpt.csv", "a") as csvfile:
+    with open("Pruning-IterativeOpt.csv", "a") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fields)
         #writer.writeheader()
-        writer.writerows(ans) """
+        writer.writerows(ans)
     """ c[1].draw(output='mpl')
     matplotlib.pyplot.show()
     c[2].draw(output='mpl')
