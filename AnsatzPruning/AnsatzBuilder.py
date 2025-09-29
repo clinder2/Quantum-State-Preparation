@@ -2,7 +2,7 @@ import matplotlib
 matplotlib.use('MacOSX')
 matplotlib.rcParams['interactive'] == True
 from qiskit.circuit import ParameterVector
-from QGA.Utilities import *
+from Utilities import *
 import heapq
 
 from rotosolve import rotosolve
