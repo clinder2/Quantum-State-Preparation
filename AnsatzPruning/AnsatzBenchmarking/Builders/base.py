@@ -11,7 +11,7 @@ class AnsatzBuilder(ABC):
         """Construct and return the ansatz QuantumCircuit."""
         pass
 
-    def get_circuit(self) -> QuantumCircuit:
+    def getCircuit(self) -> QuantumCircuit:
         if self.circuit is None:
             self.circuit = self.build()
         return self.circuit

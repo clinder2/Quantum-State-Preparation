@@ -1,17 +1,16 @@
 from qiskit_algorithms import VQE
 from .Builders.base import AnsatzBuilder
 from .Problems.base import ProblemSet
-from qiskit_algorithms.optimizers import SLSQP
+from qiskit_algorithms.optimizers import COBYLA
 import time
-from qiskit.primitives import Estimator
+from qiskit.primitives import StatevectorEstimator
 
 def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ): 
 
     problemSet = problems.getProblemSet()
     results = []
-    estimator = Estimator(options={"shots":None}) 
-    optimizer = SLSQP(maxiter=100)
-
+    estimator = StatevectorEstimator() 
+    optimizer = COBYLA(maxiter=100)
     for i, (hamiltonian, exact) in enumerate(problemSet): 
         builder = builder_class(hamiltonian)
 
@@ -21,9 +20,9 @@ def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ):
 
         depth = circuit.depth()
         gates = circuit.size()
-
-        vqe = VQE(estimator, circuit, optimizer)
-        vqe_result = vqe.compute_minimum_eigenvalue(hamiltonian)
+        # Correct VQE initialization and call
+        vqe = VQE(estimator=estimator, ansatz=circuit, optimizer=optimizer)
+        vqe_result = vqe.compute_minimum_eigenvalue(operator=hamiltonian)
         vqe_energy = vqe_result.eigenvalue.real
         error = abs(vqe_energy - exact)
 
@@ -41,4 +40,3 @@ def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ):
         results.append(result)
     
     return results
-

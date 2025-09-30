@@ -1,6 +1,6 @@
 from ..base import ProblemSet
 from .MaxCutHamiltonian import buildMaxCutHamiltonian
-from networkx import nx
+import networkx as nx
 from qiskit.quantum_info import SparsePauliOp
 
 def problem1(): 
@@ -37,14 +37,14 @@ def problem3():
 
 class MaxCutProblemSet(ProblemSet): 
     def createProblemSets(self) -> list[ tuple[SparsePauliOp, float]]:
-        graphs: list[tuple[nx.graph, float]] = [
+        graphs: list[tuple[nx.Graph, float]] = [
             problem1(), 
             problem2(), 
             problem3()
         ] 
         problems:list[ tuple[SparsePauliOp, float]]= [(None, None)]*len(graphs)
 
-        for i, (graph, ans) in graphs: 
+        for i, (graph, ans) in enumerate(graphs): 
             problems[i] = (buildMaxCutHamiltonian(graph), ans)
 
         return problems 
