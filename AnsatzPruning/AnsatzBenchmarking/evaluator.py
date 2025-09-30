@@ -6,6 +6,9 @@ import time
 from qiskit.primitives import StatevectorEstimator
 
 def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ): 
+    '''
+    Evaluator using StateVectorEstimator and VQE to find ground states 
+    '''
 
     problemSet = problems.getProblemSet()
     results = []
