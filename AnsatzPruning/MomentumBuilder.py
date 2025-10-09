@@ -46,7 +46,7 @@ def MomentumBuilder(params:list, inds:list, ansatz:QuantumCircuit,
             M[i]=beta1*M[i]+(1-beta1)*grad_i
             heapq.heappush(accumulator, (M[i],inds[i]))
         ### Momentum layer construction
-        print(accumulator)
+        # print(accumulator)
         mLayer,nparams,ninds=momen_layer(it,n, accumulator)
         params=params+nparams
         inds=inds+ninds
@@ -71,12 +71,14 @@ def MomentumBuilder(params:list, inds:list, ansatz:QuantumCircuit,
         # print("layer by layer", lay)
 
     circuit=circuit.compose(ansatz)
-    print(circuit)
-        #print(ansatz.data)
-        #print(cost_func(params,circuit,hamiltonian,estimator))
-    # circuit = circuit.compose(ansatz)
-    x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
-    print(x)
+    # print(circuit)
+    #     #print(ansatz.data)
+    #     #print(cost_func(params,circuit,hamiltonian,estimator))
+    # # circuit = circuit.compose(ansatz)
+    # x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
+    # print(x)
+
+    return circuit
 
 if __name__ == "__main__":
     H = SparsePauliOp.from_list([("ZIZZ", 1),("ZZII", 3),("IZZI", 1),("IIZZ", 1)]) # Toy hamiltonian

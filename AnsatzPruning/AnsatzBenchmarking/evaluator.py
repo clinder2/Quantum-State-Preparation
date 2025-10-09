@@ -4,6 +4,7 @@ from .Problems.base import ProblemSet
 from qiskit_algorithms.optimizers import COBYLA
 import time
 from qiskit.primitives import StatevectorEstimator
+import numpy as np
 
 def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ): 
     '''
@@ -14,7 +15,8 @@ def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ):
     results = []
     estimator = StatevectorEstimator() 
     optimizer = COBYLA(maxiter=100)
-    for i, (hamiltonian, exact) in enumerate(problemSet): 
+    for i, (h, exact) in enumerate(problemSet): 
+        hamiltonian = -h
         builder = builder_class(hamiltonian)
 
         start = time.time()
@@ -26,8 +28,11 @@ def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ):
         # Correct VQE initialization and call
         vqe = VQE(estimator=estimator, ansatz=circuit, optimizer=optimizer)
         vqe_result = vqe.compute_minimum_eigenvalue(operator=hamiltonian)
-        vqe_energy = vqe_result.eigenvalue.real
+        vqe_energy = -1 * vqe_result.eigenvalue.real
         error = abs(vqe_energy - exact)
+
+        eigenvalues, _ = np.linalg.eig(h.to_matrix())
+        groundState = np.real(np.max(eigenvalues))
 
         result = {
             "builder": builder_class.__name__,
@@ -37,6 +42,7 @@ def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ):
             "build_time": build_time,
             "energy_error": error,
             "vqe_energy": vqe_energy,
+            "solved_eigenvalue": groundState, 
             "exact_energy": exact
         }
 
