@@ -24,7 +24,7 @@ def evaluateBuilder(builder_class:AnsatzBuilder, problems:ProblemSet ):
         build_time = time.time() - start
 
         depth = circuit.depth()
-        gates = circuit.size()
+        gates = circuit.num_parameters
         # Correct VQE initialization and call
         vqe = VQE(estimator=estimator, ansatz=circuit, optimizer=optimizer)
         vqe_result = vqe.compute_minimum_eigenvalue(operator=hamiltonian)
