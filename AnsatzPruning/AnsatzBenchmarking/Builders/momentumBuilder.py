@@ -1,5 +1,8 @@
 from .base import AnsatzBuilder 
-from  MomentumBuilder import MomentumBuilder as mb
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from MomentumBuilder import MomentumBuilder as mb
 from qiskit.circuit import Parameter, QuantumCircuit
 from qiskit.primitives import StatevectorEstimator
 

@@ -7,6 +7,10 @@ from random import randint
 import matplotlib
 matplotlib.use('MacOSX')
 matplotlib.rcParams['interactive'] == True
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from QGA.LayerGA import *
 from scipy.optimize import minimize
 from qiskit_aer.aerprovider import AerSimulator
 from qiskit import QuantumCircuit, transpile
@@ -20,7 +24,6 @@ from qiskit.quantum_info import *
 from Utilities import *
 #from qiskit_nature import *
 #from qiskit_nature.second_q.operators.commutators import commutator
-from LayerGA import *
 from Hgenerator import *
 #import qiskit.opflow as OP
 import heapq
@@ -106,7 +109,24 @@ def LayerOptimizer(params:list, ansatz:QuantumCircuit, layers:int,
         tempC = tempC.compose(naiveLayer) # add new layer
         #tempC = tempC.assign_parameters(currParams)
         #tempC.save_statevector(str(l))
-        x = minimize(cost_func, np.ones(len(currParams)), args=(tempC, H, estimator), method="COBYLA")
+
+        # Skip optimization if no parameters after pruning
+        if len(currParams) == 0:
+            # A dummy result object to handle no parameters
+            class DummyResult:
+                def __init__(self):
+                    cost = cost_func([], tempC, H, estimator)
+                    if isinstance(cost, np.ndarray):
+                        self.fun = float(cost.item() if cost.size == 1 else cost[0])
+                    elif isinstance(cost, list):
+                        self.fun = float(cost[0] if len(cost) > 0 else 0)
+                    else:
+                        self.fun = float(cost)
+                    self.x = np.array([])
+                    self.success = True
+            x = DummyResult()
+        else:
+            x = minimize(cost_func, np.ones(len(currParams)), args=(tempC, H, estimator), method="COBYLA")
         #print(x.fun)
         #print(x.x)
         index=0
@@ -132,7 +152,23 @@ def LayerOptimizer(params:list, ansatz:QuantumCircuit, layers:int,
         index=index+1
     print(circuit.parameters) """
     #print(circuit)
-    x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
+    # Skip optimization if no parameters
+    if len(params) == 0 or circuit.num_parameters == 0:
+        # A dummy result object
+        class DummyResult:
+            def __init__(self):
+                cost = cost_func([], circuit, H, estimator)
+                if isinstance(cost, np.ndarray):
+                    self.fun = float(cost.item() if cost.size == 1 else cost[0])
+                elif isinstance(cost, list):
+                    self.fun = float(cost[0] if len(cost) > 0 else 0)
+                else:
+                    self.fun = float(cost)
+                self.x = np.array([])
+                self.success = True
+        x = DummyResult()
+    else:
+        x = minimize(cost_func, params, args=(circuit, H, estimator), method="COBYLA")
     #print(x)
     #print('Cost: ' + str(cost_func(params, circuit, hamiltonian, Estimator())))
     return x, circuit, badcircuit
