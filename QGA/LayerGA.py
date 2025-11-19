@@ -5,7 +5,11 @@ import matplotlib
 matplotlib.use('MacOSX')
 matplotlib.rcParams['interactive'] == True
 from scipy.optimize import minimize
-from qiskit_aer.aerprovider import AerSimulator
+try:
+    # qiskit_aer is optional for these pure-Python utilities; import if available
+    from qiskit_aer.aerprovider import AerSimulator
+except Exception:
+    AerSimulator = None
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import RealAmplitudes
 from qiskit.circuit.library import *
@@ -14,7 +18,12 @@ from qiskit.primitives import StatevectorEstimator as Estimator
 from qiskit.primitives import StatevectorSampler as Sampler
 from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit.quantum_info import *
-from Utilities import *
+try:
+    # when used as package, import the Utilities module from this package
+    from QGA.Utilities import *
+except Exception:
+    # fallback for direct script execution
+    from Utilities import *
 import heapq
 import random
 
@@ -26,10 +35,21 @@ def buildLayer(chrom: str, qbits: int):
     layer = QuantumCircuit(qbits)
     params = []
     for i in range(0, qbits):
-        if chrom[i]=='R':
-            p=Parameter(str(i))
+        # Support multiple single-char rotation encodings:
+        # 'R' or 'Y' -> RY, 'X' -> RX, 'Z' -> RZ, 'I' -> Identity (no gate)
+        ch = chrom[i]
+        if ch in ('R', 'r', 'Y', 'y'):
+            p = Parameter(str(i))
             params.append(p)
             layer.ry(p, i)
+        elif ch in ('X', 'x'):
+            p = Parameter(str(i))
+            params.append(p)
+            layer.rx(p, i)
+        elif ch in ('Z', 'z'):
+            p = Parameter(str(i))
+            params.append(p)
+            layer.rz(p, i)
     if len(chrom) > qbits:
         cx = chrom.split('|')[1:]
         for cxGate in cx:
@@ -43,11 +63,16 @@ def randomLayer(qubits: int):
     MAXCX = 3
     r = np.random.normal(.5, .5, qubits + MAXCX)
     l = ''
+    # Randomly choose among R (RY), X (RX), Z (RZ), and I (identity)
     for i in range(0, qubits):
-        if r[i] <= .5:
+        if r[i] <= 0.25:
             l += 'R'
+        elif r[i] <= 0.5:
+            l += 'X'
+        elif r[i] <= 0.75:
+            l += 'Z'
         else:
-            l+='I'
+            l += 'I'
     for i in range(qubits, len(r)):
         if r[i] <= .5:
             l+='|'

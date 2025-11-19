@@ -4,6 +4,9 @@ matplotlib.rcParams['interactive'] == True
 from qiskit.circuit import ParameterVector
 from Utilities import *
 import heapq
+from qiskit.quantum_info import SparsePauliOp, Statevector
+from qiskit.circuit import Parameter, QuantumCircuit
+from qiskit.primitives import StatevectorEstimator as Estimator
 
 from rotosolve import rotosolve
 """
@@ -11,20 +14,15 @@ Function to add momentum aware layer layers times
 Calculates gradients for each layer, removes smallest magnitude RY gates with given pruning rate
 """
 def momen_layer(it:int, n:int, momentum:list, radius:int=1, keep:int=2):
-    lay=QuantumCircuit(n)
-    params=[]
-    inds=[]
-    for i in range(keep):
-        angle = Parameter("it-"+str(it)+", "+str(i))
-        ind=momentum[i][1]
-        params.append(1)
-        inds.append(ind)
-        lay.rx(angle, ind)
-        for r in range(1,radius+1):
-            if ind +r<n:
-                lay.cx(ind,ind+r)
-            if ind-r>=0:
-                lay.cx(ind,ind-r)
+    from QGA.LayerGA import buildLayer, randomLayer
+    # Use a chromosome string to encode RX/RY/RZ gates for each qubit
+    if n == 4:
+        chrom = 'XRYZ'
+    else:
+        chrom = randomLayer(n)
+    lay = buildLayer(chrom, n)
+    params = [1] * lay.num_parameters
+    inds = list(range(n))
     return lay, params, inds
 
 def MomentumBuilder(params:list, inds:list, ansatz:QuantumCircuit,
@@ -82,18 +80,17 @@ def MomentumBuilder(params:list, inds:list, ansatz:QuantumCircuit,
 
 if __name__ == "__main__":
     H = SparsePauliOp.from_list([("ZIZZ", 1),("ZZII", 3),("IZZI", 1),("IIZZ", 1)]) # Toy hamiltonian
-    observables = [
-        *H.paulis,H
-    ]
-    angle1 = Parameter("angle1")
-    angle2 = Parameter("angle2")
-    angle3 = Parameter("angle3")
-    angle4 = Parameter("angle4")
     circuit = QuantumCircuit(4)
     ansatz = QuantumCircuit(4)
-    ansatz.rx(angle1, 0)
-    ansatz.rx(angle2, 1)
-    ansatz.rx(angle3, 2)
-    ansatz.rx(angle4, 3)
-    #circuit = circuit.compose(ansatz)
-    MomentumBuilder([1,1,1,1],[0,1,2,3],ansatz,circuit,observables,Estimator(),.9,.99)
+    # Use MomentumBuilder to build the circuit
+    final_circuit = MomentumBuilder([1,1,1,1],[0,1,2,3],ansatz,circuit,H,None,.9,.99)
+    # Use dummy params for demonstration
+    params = [1.0] * final_circuit.num_parameters
+    from qiskit.quantum_info import Statevector
+    def statevector_cost(params, circuit, hamiltonian):
+        qc_bound = circuit.assign_parameters(params)
+        sv = Statevector.from_instruction(qc_bound)
+        mat = hamiltonian.to_matrix()
+        return float((sv.data.conj().T @ mat @ sv.data).real)
+    cost = statevector_cost(params, final_circuit, H)
+    print("Expectation value <psi|H|psi>:", cost)

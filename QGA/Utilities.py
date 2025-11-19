@@ -8,7 +8,10 @@ matplotlib.use('MacOSX')
 matplotlib.rcParams['interactive'] == True
 import csv
 from scipy.optimize import minimize
-from qiskit_aer.aerprovider import AerSimulator
+try:
+    from qiskit_aer.aerprovider import AerSimulator
+except Exception:
+    AerSimulator = None
 #from qiskit_aer import Aer, aerprovider
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import RealAmplitudes
