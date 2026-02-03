@@ -41,9 +41,27 @@ def momentum_monte_carlo(params:list, inds:list, ansatz:QuantumCircuit,
     # print(f"Running Monte Carlo (stochastic hill climbing)")
     simulator = AerSimulator(method='statevector')
     initial_params = initial_params.copy()
-    optimized_params = MonteCarlo.stochastic_hill_climbing(
+
+    # Stochastic hill climbing
+    # optimized_params = MonteCarlo.stochastic_hill_climbing(
+    #     optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
+    # )
+
+    # Differential Evolution
+    # optimized_params = MonteCarlo.diff_evolution(
+    #     optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
+    # )
+
+    # Global best PSO
+    # optimized_params = MonteCarlo.gbest_pso(
+    #     optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
+    # )
+
+    # Simulated Annealing
+    optimized_params = MonteCarlo.simulated_annealing(
         optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
     )
+
     print("Cost after MomentumBuilder and Monte Carlo: ", cost_func(optimized_params, optimized_ansatz, observables, estimator))
     
     return optimized_ansatz, optimized_params
