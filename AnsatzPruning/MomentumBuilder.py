@@ -29,7 +29,8 @@ def momen_layer(it:int, n:int, momentum:list, radius:int=1, keep:int=2):
 
 def MomentumBuilder(params:list, inds:list, ansatz:QuantumCircuit,
                  circuit:QuantumCircuit, hamiltonian:SparsePauliOp, 
-                 estimator:Estimator, beta1:float, beta2:float, iters:int=2):
+                 estimator:Estimator, beta1:float, beta2:float, iters:int=2,
+                 return_ansatz_and_params:bool=False):
     n = circuit.num_qubits
     M=np.zeros((len(params))) ###Momentum
     currCirc=QuantumCircuit(n)
@@ -95,5 +96,8 @@ if __name__ == "__main__":
     ansatz.rx(angle2, 1)
     ansatz.rx(angle3, 2)
     ansatz.rx(angle4, 3)
+    ansatz.draw(output="mpl")
     #circuit = circuit.compose(ansatz)
-    MomentumBuilder([1,1,1,1],[0,1,2,3],ansatz,circuit,observables,Estimator(),.9,.99)
+    finalMomentum=MomentumBuilder([1,1,1,1],[0,1,2,3],ansatz,circuit,observables,Estimator(),.9,.99)
+    finalMomentum.draw(output="mpl")
+    matplotlib.pyplot.show()
