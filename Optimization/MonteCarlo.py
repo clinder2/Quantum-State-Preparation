@@ -12,10 +12,10 @@ from AnsatzPruning.Utilities import cost_func as utilities_cost_func
 
 # Simulated Annealing optimization
 def simulated_annealing(runs, params, ansatz, simulator, observables=None, estimator=None):
-    B = E(params, ansatz, simulator) 
-    prev_E = B
+    prev_E = cost_func(params, ansatz, simulator, observables, estimator)
+    best_params = params.copy()
+    best_E = prev_E
 
-    # Temperature function for simulated annealing
     def T(t):
         c = 0.02
         a = 0.01
@@ -24,23 +24,25 @@ def simulated_annealing(runs, params, ansatz, simulator, observables=None, estim
 
     # Main loop for simulated annealing
     for t in range(1, runs):
-        # delta = np.random.normal(0, .1, 4) 
-        delta = np.random.normal(0, .1, len(params)) 
-        params_new = params + delta 
-        E_new = E(params_new, ansatz, simulator) 
-        delta_E = E_new - prev_E 
+        delta = np.random.normal(0, 0.1, len(params))
+        params_new = params + delta
+        E_new = cost_func(params_new, ansatz, simulator, observables, estimator)
+        delta_E = E_new - prev_E
 
         if delta_E <= 0:
             params = params_new
             prev_E = E_new
+            if prev_E < best_E:
+                best_E = prev_E
+                best_params = params.copy()
         else:
-            h = math.pow(math.e, -1 * delta_E / T(t)) 
-            U = np.random.normal(.5, .5, 1) 
+            h = math.exp(-1 * delta_E / T(t))
+            U = np.random.normal(.5, .5, 1)
             if U < h:
                 params = params_new
                 prev_E = E_new
 
-    return params 
+    return best_params 
 
 # Global Best Particle Swarm optimization
 def gbest_pso(runs, params, ansatz, simulator, observables=None, estimator=None):
