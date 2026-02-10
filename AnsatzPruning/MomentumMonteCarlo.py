@@ -19,7 +19,7 @@ from qiskit.circuit import Parameter
 def momentum_monte_carlo(params:list, inds:list, ansatz:QuantumCircuit,
                          circuit:QuantumCircuit, hamiltonian:SparsePauliOp,
                          estimator:Estimator, beta1:float, beta2:float,
-                         iters:int=2, optimization_runs:int=100, method:str='hill_climbing'):
+                         iters:int=2, optimization_runs:int=100):
     """
     Ansatz optimization pipeline that first runs MomentumBuilder and then optimizes 
     the parameters using Monte Carlo optimization method.
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     # final_circuit_MB.draw(output="mpl")
 
     final_circuit_MMC, final_params = momentum_monte_carlo([1,1,1,1], [0,1,2,3], ansatz, circuit, H, Estimator(),
-        beta1=0.9, beta2=0.99, iters=2, optimization_runs=100, method='hill_climbing'
+        beta1=0.9, beta2=0.99, iters=2, optimization_runs=100
     )
     final_circuit_MMC.draw(output="mpl")
     
