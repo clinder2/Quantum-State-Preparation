@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import numpy as np
 import math
@@ -35,7 +36,9 @@ def momentum_monte_carlo(params:list, inds:list, ansatz:QuantumCircuit,
     # Extract parameters from ansatz
     num_params = len(optimized_ansatz.parameters)
     initial_params = np.ones(num_params)
-    print("Cost after MomentumBuilder: ", cost_func(initial_params, optimized_ansatz, observables, estimator))
+    cost_mb = cost_func(initial_params, optimized_ansatz, observables, estimator)
+    energy_mb = cost_mb[-1] # Last element in the list is the energy
+    print("Energy after MomentumBuilder: ", energy_mb)
     
     # Run Monte Carlo optimization
     # print(f"Running Monte Carlo (stochastic hill climbing)")
@@ -43,26 +46,41 @@ def momentum_monte_carlo(params:list, inds:list, ansatz:QuantumCircuit,
     initial_params = initial_params.copy()
 
     # Stochastic hill climbing
+    # start_time = time.perf_counter()
     # optimized_params = MonteCarlo.stochastic_hill_climbing(
     #     optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
     # )
+    # end_time = time.perf_counter()
+    # print(f"stochastic_hill_climbing took {end_time - start_time:.3f} seconds.")
 
     # Differential Evolution
+    # start_time = time.perf_counter()
     # optimized_params = MonteCarlo.diff_evolution(
     #     optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
     # )
+    # end_time = time.perf_counter()
+    # print(f"diff_evolution took {end_time - start_time:.3f} seconds.")
 
     # Global best PSO
+    # start_time = time.perf_counter()
     # optimized_params = MonteCarlo.gbest_pso(
     #     optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
     # )
+    # end_time = time.perf_counter()
+    # print(f"gbest_pso took {end_time - start_time:.3f} seconds.")
 
     # Simulated Annealing
+    # start_time = time.perf_counter()
     optimized_params = MonteCarlo.simulated_annealing(
         optimization_runs, initial_params, optimized_ansatz, simulator, observables, estimator
     )
+    # end_time = time.perf_counter()
+    # print(f"simulated_annealing took {end_time - start_time:.3f} seconds.")
 
-    print("Cost after MomentumBuilder and Monte Carlo: ", cost_func(optimized_params, optimized_ansatz, observables, estimator))
+
+    cost_final = cost_func(optimized_params, optimized_ansatz, observables, estimator)
+    energy_final = cost_final[-1] # Last element in the list is the energy
+    print("Energy after MomentumBuilder and Monte Carlo: ", energy_final)
     
     return optimized_ansatz, optimized_params
 
@@ -96,5 +114,5 @@ if __name__ == "__main__":
     final_circuit_MMC.draw(output="mpl")
     
     # print(f"Optimization complete. Final parameters: {final_params}")
-    plt.show()
+    # plt.show()
 
