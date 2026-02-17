@@ -1,6 +1,6 @@
 import matplotlib
-matplotlib.use('MacOSX')
-matplotlib.rcParams['interactive'] == True
+# matplotlib.use('MacOSX')
+# matplotlib.rcParams['interactive'] == True
 from qiskit.circuit import ParameterVector
 from Utilities import *
 import heapq
