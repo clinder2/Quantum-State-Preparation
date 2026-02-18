@@ -89,3 +89,17 @@ def buildNetworkTrafficRoutingHamiltonian(
     coeffs = [c for _, c in pauliTerms]
 
     return SparsePauliOp(paulis, coeffs).simplify()
+
+if __name__ == "__main__":
+    G = nx.Graph()
+    G.add_edge(0, 1, weight=5.0)
+    G.add_edge(1, 2, weight=5.0)
+
+    paths = [
+        [(0, 1), (1, 2)],   # Path A
+        [(0, 1)],           # Path B
+    ]
+    hamiltonian = buildNetworkTrafficRoutingHamiltonian(G, paths)
+
+    print(hamiltonian)
+
