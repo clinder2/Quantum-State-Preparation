@@ -5,6 +5,7 @@ class AnsatzBuilder(ABC):
     def __init__(self, hamiltonian):
         self.hamiltonian = hamiltonian
         self.circuit = None
+        self.initial_point = None
 
     @abstractmethod
     def build(self):
