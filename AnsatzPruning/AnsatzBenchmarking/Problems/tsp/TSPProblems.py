@@ -154,7 +154,7 @@ class TSPProblemSet(ProblemSet):
         problems: List[Tuple[SparsePauliOp, float]] = []
 
         for i, (D, min_cost) in enumerate(instances):
-            H = buildTSPHamiltonian(D, penalty=30.0)
+            H = buildTSPHamiltonian(D, penalty=20.0)
 
             expectedAns = -float(min_cost)
 
