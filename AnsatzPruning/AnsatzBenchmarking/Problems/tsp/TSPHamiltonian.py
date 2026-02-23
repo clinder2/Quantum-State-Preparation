@@ -10,7 +10,6 @@ except Exception:
     lil_matrix = None
     issparse = lambda x: False
 
-
 def _qubo_upper_to_ising_pauli(
     Q: np.ndarray,
     offset: float = 0.0,
