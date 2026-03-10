@@ -1,5 +1,5 @@
 from AnsatzPruning.AnsatzBenchmarking.Problems.base import ProblemSet
-from .KnapsackHamiltonian import buildKnapsackHamiltonian
+from KnapsackHamiltonian import buildKnapsackHamiltonian
 from qiskit.quantum_info import SparsePauliOp
 import itertools
 import numpy as np
